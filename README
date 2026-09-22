@@ -1,0 +1,9 @@
+In DEFAULT mode, the STM8L051F3 starts with a master clock of 16 MHz.
+It can be tested by taking it out on Pin 20, Port PC4, CCO pin.
+The core operates at 8 MHz, but on the CCO port pin, we can only output the 16 MHz master clock,
+which can be divided by a divider located before the CCO output.
+If we leave the divider at 1, meaning no division on the CCO, we will measure 16 MHz.
+Even if the core operates at 2 MHz or another frequency, the CCO output will represent 16 MHz
+divided by the divider placed just before the CCO.
+In this program, the CCO output is 16 MHz.
+The clock source is an internal RC oscillator of the HSI type in the STM8L051F3.

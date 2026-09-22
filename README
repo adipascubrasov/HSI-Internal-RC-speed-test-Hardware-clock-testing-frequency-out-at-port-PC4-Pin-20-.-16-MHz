@@ -7,3 +7,5 @@ Even if the core operates at 2 MHz or another frequency, the CCO output will rep
 divided by the divider placed just before the CCO.
 In this program, the CCO output is 16 MHz.
 The clock source is an internal RC oscillator of the HSI type in the STM8L051F3.
+
+Discussions are open

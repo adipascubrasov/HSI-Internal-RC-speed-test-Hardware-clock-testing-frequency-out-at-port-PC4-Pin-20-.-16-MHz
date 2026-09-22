@@ -4,44 +4,45 @@ stm8/
 ;Case : TSSOP20 
     segment 'rom'           ; Codul se va scrie în memoria Flash (ROM)
 
-; DEFINIRE ADRESE REGISTRE CONFORME CU ARHITECTURA NATIVĂ STM8L
+; DEFINIRE ADRESE REGISTRE CONFORME CU ARHITECTURA NATIVA STM8L
 FLASH_PUKR  equ $5052       ; Registru deblocare memorie Flash
 CLK_PCKENR2 equ $50C4       ; Activare ceas periferice (grupul 2 - Porturi IO)
-CLK_CCOR    equ $50C5       ; Adresa reală STM8L pentru control ieșire ceas (CCO)
+CLK_CCOR    equ $50C5       ; Adresa reala STM8L pentru control ie?ire ceas (CCO)
 
 ; REGISTRE GPIO PORT C
 PC_DDR      equ $500C       ; Data Direction Register Port C
 PC_CR1      equ $500D       ; Control Register 1 Port C (Push-Pull)
-PC_CR2      equ $500E       ; Control Register 2 Port C (Viteză ieșire de 10 MHz)
+PC_CR2      equ $500E       ; Control Register 2 Port C (Viteza ie?ire de 10 MHz)
 
 INIT:   
         ; 1. Deblocare - unlock Flash hardware
-        ld a,#$56           ; Încarcă prima cheie de deblocare
+        ld a,#$56           ; Încarca prima cheie de deblocare
         ld FLASH_PUKR,a     ; Scrie prima cheie
-        ld a,#$AE           ; Încarcă a doua cheie de deblocare
+        ld a,#$AE           ; Încarca a doua cheie de deblocare
         ld FLASH_PUKR,a     ; Scrie a doua cheie
 
         ; 2. Activare ceas pentru porturile IO 
         ld a,#$FF           
-        ld CLK_PCKENR2,a    ; Pornește alimentarea cu ceas pentru Portul C
+        ld CLK_PCKENR2,a    ; Porne?te alimentarea cu ceas pentru Portul C
 
-        ; 3. CONFIGURARE CORECTĂ PENTRU SEMNAL DE MARE VITEZĂ PE PC4 . pin 20
+        ; 3. CONFIGURARE CORECTA PENTRU SEMNAL DE MARE VITEZA PE PC4 . pin 20
         ld a,#$FF       
-        ld PC_DDR,a         ; Setează portul C ca ieșire
-        ld PC_CR1,a         ; Activează modul Push-Pull
-        ld a,#$10           ; Mască binară dedicată pentru pinul PC4
-        ld PC_CR2,a         ; Activează panta rapidă (până la 10 MHz ? ) pe pinul PC4 pentru CCO
+        ld PC_DDR,a         ; Seteaza portul C ca ie?ire
+        ld PC_CR1,a         ; Activeaza modul Push-Pull
+        ld a,#$10           ; Masca binara dedicata pentru pinul PC4
+        ld PC_CR2,a         ; Activeaza panta rapida (pâna la 10 MHz ? ) pe pinul PC4 pentru CCO
 
-        ; 4. ACTIVARE IEȘIRE CEAS PE PIN (CCO)
-        ; Valoarea $02 pornește circuitul CCO și alege sursa MASTER CLOCK (16 MHz)
+        ; 4. ACTIVARE IE?IRE CEAS PE PIN (CCO)
+        ; Valoarea $02 porne?te circuitul CCO ?i alege sursa MASTER CLOCK (16 MHz)
         ld a,#$02           
         ld CLK_CCOR,a       ; Direct în siliciu, semnalul de 16 MHz este trimis spre pinul PC4
 
 MAIN:   
-        jp MAIN             ; Buclă infinită, hardware-ul menține semnalul pe PC4 permanent
+        jp MAIN             ; Bucla infinita, hardware-ul men?ine semnalul pe PC4 permanent
 
-    segment 'vectit'        ; Secțiunea pentru tabela de vectori
-        dc.b $82, $00       ; Aliniere hardware specifică seriei STM8L
-        dc.w INIT           ; Setează rutina INIT ca vector de pornire (Reset)
+    segment 'vectit'        ; Sec?iunea pentru tabela de vectori
+        dc.b $82, $00       ; Aliniere hardware specifica seriei STM8L
+        dc.w INIT           ; Seteaza rutina INIT ca vector de pornire (Reset)
 
-    end                     ; Sfârșitul fișierului de asamblare
+    end      
+		; Sfâr?itul fi?ierului de asamblare
